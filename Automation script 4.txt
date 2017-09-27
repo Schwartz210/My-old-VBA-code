@@ -1,0 +1,64 @@
+Function MemoDate(Memo)
+'Returns the last eight digits in a string, which happens to be where activity dates are encoded in the memo line of trans
+'Avi Schwartz - October 2014
+MemoDate = Right(Memo, 8)
+End Function
+
+Function ProgramDate(ShortJob)
+'Returns the program date for a Job based off data pulled from a database
+'Avi Schwartz - October 2014
+
+''VARIABLE DECLARATIONS''
+Dim JobDB As String 'Specifies the name of that client's program database. Added 02/04/15
+Dim JobProgramInt As Integer 'Specifies the column of that client's program database where the program date resides. Added 02/04/15
+
+''VALUE ASSIGNMENT''
+JobDB = Settings("Sheet Name")
+JobProgramInt = Settings("Program Date Column")
+ProgramDate = Application.WorksheetFunction.VLookup(ShortJob, Workbooks(JobInfo).Worksheets(JobDB).Range("A1:M1000"), JobProgramInt, False)
+End Function
+
+Function QBDate(QB_Date)
+QBDate = QB_Date
+End Function
+
+Function TransType(TransactionType)
+'Return either "Check" or "Credit Card Charge"
+'Avi Schwartz - October 2014
+
+''INSTRUCTIONS''
+If TransactionType = "Check" Then
+    TransType = "Check"
+ElseIf TransactionType = "Credit Card Charge" Then
+    TransType = "Credit Card Charge"
+Else: TransType = "Other"
+End If
+End Function
+
+Function ComplianceDate2(Memo, Job, QB_Date, TransactionType)
+''VARIABLE DECLARATIONS''
+Dim ActiveCheck As String
+Dim ActiveCC As String
+
+''VALUE ASSIGNMENT''
+ActiveCheck = Settings("Check")
+ActiveCC = Settings("Credit Card Charge")
+
+''INSTRUCTIONS''
+If TransType(TransactionType) = "Check" Then
+    If ActiveCheck = "CheckDate" Then
+        ComplianceDate2 = QBDate(QB_Date)
+    ElseIf ActiveCheck = "MemoDate" Then
+        ComplianceDate2 = MemoDate(Memo)
+    Else
+        ComplianceDate2 = ProgramDate(Job)
+    End If
+        ElseIf ActiveCC = "ProgramDate" Then
+            ComplianceDate2 = ProgramDate(Job)
+        ElseIf ActiveCC = "QB Date" Then
+            ComplianceDate2 = QBDate(QB_Date)
+        Else
+            ComplianceDate2 = MemoDate(Memo)
+        End If
+End Function
+

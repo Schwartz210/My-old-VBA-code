@@ -1,0 +1,73 @@
+Function AccountScreener(F) As String
+'This function reviews charges by G/L and decides if they should be included on the report
+'Added on 02/05/15
+
+'Variable Declarations
+Dim Acct(1 To 25) As String
+Dim IO(1 To 25) As String
+Dim Counter As Integer
+
+'Variables' values based on inputs from Control Center.xlsx
+Counter = 1
+
+Do
+Acct(Counter) = Workbooks(ControlCenter).Worksheets("Acct Screener").Range("A" & Counter + 1).Value
+IO(Counter) = Workbooks(ControlCenter).Worksheets("Acct Screener").Range(ClientNum & Counter + 1).Value
+Counter = Counter + 1
+Loop Until Counter = 26
+
+
+'If statements scanning for keywords and returning Include/Exclude status
+If InStr(F, Acct(1)) > 0 Then
+    AccountScreener = IO(1)
+ElseIf InStr(F, Acct(2)) > 0 Then
+    AccountScreener = IO(2)
+ElseIf InStr(F, Acct(3)) > 0 Then
+    AccountScreener = IO(3)
+ElseIf InStr(F, Acct(4)) > 0 Then
+    AccountScreener = IO(4)
+ElseIf InStr(F, Acct(5)) > 0 Then
+    AccountScreener = IO(5)
+ElseIf InStr(F, Acct(6)) > 0 Then
+    AccountScreener = IO(6)
+ElseIf InStr(F, Acct(7)) > 0 Then
+    AccountScreener = IO(7)
+ElseIf InStr(F, Acct(8)) > 0 Then
+    AccountScreener = IO(8)
+ElseIf InStr(F, Acct(9)) > 0 Then
+    AccountScreener = IO(9)
+ElseIf InStr(F, Acct(10)) > 0 Then
+    AccountScreener = IO(10)
+ElseIf InStr(F, Acct(11)) > 0 Then
+    AccountScreener = IO(11)
+ElseIf InStr(F, Acct(12)) > 0 Then
+    AccountScreener = IO(12)
+ElseIf InStr(F, Acct(13)) > 0 Then
+    AccountScreener = IO(13)
+ElseIf InStr(F, Acct(14)) > 0 Then
+    AccountScreener = IO(14)
+ElseIf InStr(F, Acct(15)) > 0 Then
+    AccountScreener = IO(15)
+ElseIf InStr(F, Acct(16)) > 0 Then
+    AccountScreener = IO(16)
+ElseIf InStr(F, Acct(17)) > 0 Then
+    AccountScreener = IO(17)
+ElseIf InStr(F, Acct(18)) > 0 Then
+    AccountScreener = IO(18)
+ElseIf InStr(F, Acct(19)) > 0 Then
+    AccountScreener = IO(19)
+ElseIf InStr(F, Acct(20)) > 0 Then
+    AccountScreener = IO(20)
+ElseIf InStr(F, Acct(21)) > 0 Then
+    AccountScreener = IO(21)
+ElseIf InStr(F, Acct(22)) > 0 Then
+    AccountScreener = IO(22)
+ElseIf InStr(F, Acct(23)) > 0 Then
+    AccountScreener = IO(23)
+ElseIf InStr(F, Acct(24)) > 0 Then
+    AccountScreener = IO(24)
+ElseIf InStr(F, Acct(25)) > 0 Then
+    AccountScreener = IO(25)
+Else: AccountScreener = "No magic word"
+End If
+End Function

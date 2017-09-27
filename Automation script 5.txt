@@ -1,0 +1,64 @@
+Sub Publish_To_Template()
+'This macro transfers the compliance data to the clients' template.
+' 03/10/15: Created
+' 04/07/15: 1) Added FileCopy code to replace open existing file. 2) Set up Mode & NewFileName variables. 3) Added Open/Close commands for Control Center.xlsx.
+
+
+
+
+''VALUE ASSIGNMENT''
+Dim OutputTab, Template, InputTab, PasteRange, Mode, NewFileName As String
+OutputTab = Settings("Input: Tab")
+Template = Settings("Output: Template")
+InputTab = Settings("Output:Template's Tab")
+PasteRange = Settings("Output: Range")
+Mode = Workbooks(ControlCenter).Worksheets("Client").Range("I6").Value
+NewFileName = Client & " Compliance " & Format(Date, "MM.DD.YY") & ".xlsx"
+
+''INSTRUCTIONS''
+FileCopy MyDirectory & "Documentation\Templates\" & Template, MyDirectory & "Documentation\" & NewFileName 'Creates new file from template
+Workbooks.Open (MyDirectory & "Documentation\" & NewFileName)
+ThisWorkbook.Activate
+Windows(SunshinePro).Activate
+Worksheets(OutputTab).Range("A2:ZZ1000").Copy
+Windows(NewFileName).Activate
+Worksheets(InputTab).Range(PasteRange).PasteSpecial (xlPasteValuesAndNumberFormats)
+Workbooks(ControlCenter).Close
+End Sub
+
+
+Sub EmailTeam()
+    Dim OutApp As Object
+    Dim OutMail As Object
+    Dim strbody As String
+    Dim EmailSub As String
+    Dim Mode As String
+    Dim Address As String
+    Address = "emailadress1;emailadress2"
+    Mode = Workbooks(ControlCenter).Worksheets("Client").Range("I6").Value
+    Set OutApp = CreateObject("Outlook.Application")
+    Set OutMail = OutApp.CreateItem(0)
+    EmailSub = Mode & " Compliance Prep"
+    strbody = "Hi guys" & vbNewLine & vbNewLine & _
+              "I've added the new entries to the following databases: Job Info.xlsx, Job Type Activity Array.xlsx, and HCP Info.xlsx. Please enter the new info and let me know." & vbNewLine & _
+              "Best Regards," & vbNewLine & vbNewLine & _
+              "Avi Schwartz" & vbNewLine & _
+              "The Curry Rockefeller Group, LLC" & vbNewLine & _
+              "Finance Department" & vbNewLine & _
+              "ASchwartz@Curryrockefellergroup.com"
+    On Error Resume Next
+    With OutMail
+        .To = Address
+        .CC = ""
+        .BCC = "sendEmailAdress"
+        .Subject = EmailSub
+        .Body = strbody
+        'You can add a file like this
+        '.Attachments.Add ("C:\test.txt")
+        .Send   'or use .Display
+    End With
+    On Error GoTo 0
+    Set OutMail = Nothing
+    Set OutApp = Nothing
+End Sub
+

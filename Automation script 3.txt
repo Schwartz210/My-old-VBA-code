@@ -1,0 +1,72 @@
+Function DecodeBrackets(E)
+'This function pulls the contents out of brackets
+'Brackets contain QTY of attendees
+'Avi Schwartz - Writen in October 2014, installed on 11/04/14
+DecodeBrackets = Left(Right(E, Len(E) - InStr(E, "[")), InStr(E, "]") - InStr(E, "[") - 1)
+End Function
+
+Function DecodeCurlyBrackets(E)
+'This function pulls the contents out of curly brackets
+'Curly brackets contain F&B total amount
+'Avi Schwartz - October 2014, installed on 11/04/14
+DecodeCurlyBrackets = Left(Right(E, Len(E) - InStr(E, "{")), InStr(E, "}") - InStr(E, "{") - 1)
+End Function
+
+Function FindAmount(FB_Amount, QB_Amount)
+' This function chooses either 1) total unallocated F&B or 2) the plain old amount.
+' 06/22/15
+
+If FB_Amount = "" Then
+    FindAmount = Format(QB_Amount, "0.00")
+Else
+    FindAmount = Format(FB_Amount, "0.00")
+End If
+End Function
+
+Function Attendees(Memo)
+' 06/22/15
+On Error Resume Next
+If Application.WorksheetFunction.IsError(DecodeBrackets(Memo)) = True Then
+    Attendees = ""
+Else
+    Attendees = Format(DecodeBrackets(Memo), "#")
+End If
+End Function
+
+Function JobShortener(X)
+If Left(X, 7) = "MZZ7041" And Not (IsNumeric(Right(Left(X, InStr(X, ":") + 3), 3))) Then
+    JobShortener = "MZZ7041" 
+ElseIf Left(X, 7) = "MZZ7041" Then
+    JobShortener = "MZZ7041" -" & Right(Left(X, InStr(X, ":") + 3), 3)
+ElseIf Left(X, 7) = "MZZ7082" Then
+    JobShortener = "MZZ7082-" & Right(Left(X, InStr(X, ":") + 3), 3)
+ElseIf Left(X, 8) = "BDU6985" Then
+    JobShortener = "BDU6985-" & Right(Left(X, InStr(X, ":") + 2), 2)
+ElseIf Left(X, 8) = "BDU7063" Then
+    JobShortener = "BDU7063-" & Right(Left(X, InStr(X, ":") + 3), 3)
+ElseIf Left(X, 8) = "BDU7108" Then
+    JobShortener = "BDSI7108-" & Right(Left(X, InStr(X, ":") + 3), 3)
+ElseIf Left(X, 7) = "MZZ7007" Then
+    JobShortener = "MZZ7007-01A"
+Else
+    JobShortener = Left(X, InStr(X, " ") - 1)
+End If
+End Function
+
+
+Function Location_Decoder(Memo)
+' 06/22/15
+If InStr(Memo, "#") > 0 Then
+    A = InStr(Memo, "#") 'Integer
+    B = Len(Memo) - A 'Integer
+    C = Right(Memo, B) 'String
+    D = InStr(C, " ") 'Integer
+    E = Left(C, D) 'String
+    F = InStrRev(E, "-->") + 2 'Integer
+    G = Len(E) 'Integer
+    H = Right(E, G - F) 'String
+    Location_Decoder = H 'String
+Else
+    Location_Decoder = "" 'String
+End If
+End Function
