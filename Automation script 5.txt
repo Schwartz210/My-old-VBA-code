@@ -43,9 +43,9 @@ Sub EmailTeam()
               "I've added the new entries to the following databases: Job Info.xlsx, Job Type Activity Array.xlsx, and HCP Info.xlsx. Please enter the new info and let me know." & vbNewLine & _
               "Best Regards," & vbNewLine & vbNewLine & _
               "Avi Schwartz" & vbNewLine & _
-              "The Curry Rockefeller Group, LLC" & vbNewLine & _
+              "Some Company" & vbNewLine & _
               "Finance Department" & vbNewLine & _
-              "ASchwartz@Curryrockefellergroup.com"
+              "ASchwartz@emailaddress.com"
     On Error Resume Next
     With OutMail
         .To = Address
